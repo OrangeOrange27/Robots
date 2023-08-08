@@ -4,30 +4,24 @@ using UnityEngine;
 
 public class RobotController : MonoBehaviour
 {
-    private List<CommandBase> _commands;
+    private List<Instruction> _instructions;
 
-    private bool _executed;
 
     public void Execute()
     {
-        if(_executed)
-            return;
+        _instructions = new List<Instruction>();
         
-        _commands = new List<CommandBase>();
+        _instructions.AddRange(
+            gameObject.GetComponentsInChildren<Instruction>());
         
-        _commands.AddRange(
-            gameObject.GetComponents<CommandBase>());
-        
-        HandleCommands().Forget();
-
-        _executed = true;
+        HandleInstructions().Forget();
     }
 
-    private async UniTask HandleCommands()
+    private async UniTask HandleInstructions()
     {
-        foreach (var command in _commands)
+        foreach (var instruction in _instructions)
         {
-            await command.Execute();
+            await instruction.Execute(transform);
         }
     }
 }

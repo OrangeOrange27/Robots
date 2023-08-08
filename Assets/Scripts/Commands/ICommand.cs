@@ -5,5 +5,5 @@ using UnityEngine;
 
 public interface ICommand
 {
-    UniTask Execute();
+    UniTask Execute(Transform target);
 }

@@ -6,16 +6,16 @@ public class RotateCommand : CommandBase
 {
     [SerializeField] private Vector3 _rotationAngles;
 
-    public override async UniTask Execute()
+    public override async UniTask Execute(Transform target)
     {
-        StartCoroutine(Rotate());
+        StartCoroutine(Rotate(target));
         await UniTask.WaitUntil((() => _commandCompleted));
     }
 
-    private IEnumerator Rotate()
+    private IEnumerator Rotate(Transform target)
     {
-        var start = Quaternion.Euler(transform.localEulerAngles);
-        var target = Quaternion.Euler(_rotationAngles);
+        var start = Quaternion.Euler(target.localEulerAngles);
+        var end = Quaternion.Euler(_rotationAngles);
         
         float t = 0;
 
@@ -23,7 +23,7 @@ public class RotateCommand : CommandBase
         {
             t += Time.deltaTime;
 
-            transform.localRotation = Quaternion.Slerp(start, target, t / _duration);
+            target.localRotation = Quaternion.Slerp(start, end, t / _duration);
 
             yield return null;
         }

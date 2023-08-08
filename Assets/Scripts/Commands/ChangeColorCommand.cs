@@ -6,15 +6,15 @@ public class ChangeColorCommand :CommandBase
 {
     [SerializeField] private Color _color;
     
-    public override async UniTask Execute()
+    public override async UniTask Execute(Transform target)
     {
-        StartCoroutine(ChangeColor());
+        StartCoroutine(ChangeColor(target));
         await UniTask.WaitUntil((() => _commandCompleted));
     }
     
-    private IEnumerator ChangeColor()
+    private IEnumerator ChangeColor(Transform target)
     {
-        var renderer = GetComponent<Renderer>();
+        var renderer = target.GetComponent<Renderer>();
         var startColor = renderer.material.color;
 
         float t = 0;
